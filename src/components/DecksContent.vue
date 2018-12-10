@@ -1,5 +1,6 @@
 <template>
     <div class="decksContent">
+        <h1 class="pageIdentifier">{{currentPage}}</h1>
         <h2 v-if="!deckList.length">Click the "+" Symbol to add a deck.</h2>
         <ul class="decks" v-else>
             <Deck
@@ -11,15 +12,17 @@
                 :currentDeck="currentDeck"
                 :currentDeckId="currentDeckId"
                 :currentCard="currentCard"
+                :deleteDeck="deleteThisDeck"
             />
-            <li class="addit">
+
+        </ul>
+        <div class="addit">
                 <img class = "newit" 
                 src="../assets/plus.png" 
                 alt="Add New Deck"
                 @click="showModal"
                 >
-            </li>
-        </ul>
+            </div>
         <Modal
             buttonText="Create New Deck"
             :onSubmit="createNewDeck"
@@ -51,6 +54,7 @@ export default {
         currentDeck: "",
         currentDeckId: "",
         currentCard:"",
+        currentPage:"",
         openDeck: {
             type: Function,
             default: () => {},
@@ -65,6 +69,15 @@ export default {
             this.$snotify.success(
                 this.currentDeck+" added to your Decks.",
                 'Deck Added!',{
+                    timeout: 2000,
+                    pauseOnHover: true
+                }
+            );
+        },
+        deckRemovedNotification(currentDeck){
+            this.$snotify.error(
+                this.currentDeck+" removed from your Decks.",
+                'Deck Removed!',{
                     timeout: 2000,
                     pauseOnHover: true
                 }
@@ -94,6 +107,17 @@ export default {
             //test handler
             console.log("Deck handled.");
             this.openDeck(name,id);
+        },
+        deleteThisDeck(deckId, deckTitle){
+            Api.killChildren(deckId).then(()=>{
+                console.log("It has been done, Sire!");
+            });
+            Api.deleteDeck(deckId).then(()=>{
+                console.log("Deck and crew comletely destroyed, Captain!")
+                this.deckRemovedNotification(deckTitle);
+                const deckIndex = this.deckList.findIndex(deck => deck.id === deckId);
+                this.deckList.splice(deckIndex, 1);
+            });
         }
     },
     created(){
@@ -120,6 +144,17 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+
+    .pageIdentifier{
+        position: fixed;
+        top: 180px;
+        right: -50px;
+        font-size: 75px;
+        opacity: .5;
+        color: white;
+        
+        transform: rotate(-90deg);
+    }
     .addit{
         padding: 50px 10px;
     }
@@ -130,19 +165,21 @@ export default {
         opacity: .6;
         width: 40px;
         &:hover{
-            background: lightgreen;
+            cursor: pointer;
+            background: rgb(116, 190, 116);
             opacity: 1;
-            box-shadow: 0px 0px 10px 10px rgba(255,255,255,.6);
+            box-shadow: 0px 0px 5px 5px rgba(255,255,255,.6);
         }
     }
     .decks{
-
-        width: 80%;
+        width: 75%;
+        
         margin: auto;
         padding: none;
         list-style: none;
-        display: flex;
-        
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 40px;
         li{
             &:hover{
                 cursor: pointer;

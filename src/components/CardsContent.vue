@@ -1,6 +1,7 @@
 //Cards
 <template>
     <div :class="{ cardsContent: true}">
+        <h1 class="pageIdentifier">{{currentDeck}}</h1>
         <div class="stuff" :class="{blur: isBlurred }">
             <h1>{{currentDeck}}</h1>
             <h2 v-if="!cardList.length">Click the "+" Symbol to add a card to the Deck.</h2>
@@ -10,19 +11,22 @@
                 :key="i"
                 @click="() => openDeckCards(i)"
                 :cardTitle="card.front"
+                :cardId="card.id"
                 :cardBack="card.back"
                 :currentDeck="currentDeck"
                 :currentDeckId="currentDeckId"
                 :currentCard="currentCard"
+                :deleteThisBitch="deleteCard"
                 />
-                <li class="addit">
-                    <img class = "newit" 
-                    src="../assets/plus.png" 
-                    alt="Add New Card"
-                    @click="showCardModal"
-                    >
-                </li>
+
             </ul>
+            <div class="addit">
+                <img class = "newit" 
+                src="../assets/plus.png" 
+                alt="Add New Card"
+                @click="showCardModal"
+                >
+            </div>
         </div>
         <CardModal
         :currentDeck="currentDeck"
@@ -62,6 +66,24 @@ export default {
         },
     },
     methods: {
+        cardDeletedNotification(){
+            this.$snotify.error(
+                "Card removed from "+this.currentDeck,
+                'Card removed!',{
+                    timeout: 2000,
+                    pauseOnHover: true
+                }
+            );
+        },
+        deleteCard(cardId){
+            Api.deleteCard(cardId)
+                .then(()=>{
+                    console.log("Card Deleted.")
+                    this.cardDeletedNotification();
+                    const cardIndex = this.cardList.findIndex(card => card.id === cardId);
+                    this.cardList.splice(cardIndex, 1);
+                });
+        },
         showCardModal(){
             
             this.newCardModalShown=true;
@@ -72,9 +94,10 @@ export default {
                 back: back,
                 parentId: this.currentDeckId,
             };
-            Api.addCard(card).then(()=>{
+            Api.addCard(card).then((docRef)=>{
                 console.log("Aye Aye, Captain!! New Card added: ["+front+"] to deck:["+this.currentDeck+"].");
                 // Update locally
+                card.id = docRef.id;
                 this.cardList.push(card);
                 
                 this.isBlurred = false;
@@ -85,11 +108,13 @@ export default {
                 console.error("Error adding card: ", error);
                 // cardErrorNotification
             });    
-        },openNewCardModal(){
+        },
+        openNewCardModal(){
             this.isBlurred = true;
             console.log("Opening New Card Modal, Sir!")
             this.newCardModalShown=true;
-        },cardAddedNotification(currentDeck){
+        },
+        cardAddedNotification(currentDeck){
             this.$snotify.success(
                 "Card Added to "+currentDeck,
                 'Card Added!',{
@@ -122,6 +147,7 @@ export default {
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const card = doc.data();
+                    card.id=doc.id;
                     this.cardList.push(card);
                 });
             }); 
@@ -132,11 +158,24 @@ export default {
 
 </script>
 <style lang="scss" scoped>
+    .pageIdentifier{
+        position: fixed;
+        top: 180px;
+        right: -10px;
+        font-size: 75px;
+        opacity: .5;
+        color: white;
+        
+        transform: rotate(-90deg);
+    }
   .blur{
     filter: blur(4px);
   }
     .addit{
         padding: 100px 10px;
+        &:hover{
+            
+        }
     }
     .cards{
 
@@ -144,7 +183,9 @@ export default {
         margin: auto;
         padding: none;
         list-style: none;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+
         
         li{
             &:hover{
@@ -160,8 +201,10 @@ export default {
         opacity: .6;
         width: 40px;
         &:hover{
-            background: lightgreen;
+            cursor: pointer;
+            background: rgb(116, 190, 116);
             opacity: 1;
+            box-shadow: 0px 0px 5px 5px rgba(255,255,255,.6);
             //box-shadow: 0px 0px 10px 10px rgba(255,255,255,.6);
         }
     }

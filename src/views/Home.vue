@@ -12,6 +12,7 @@
       :currentDeck="currentDeck"
       :currentDeckId="currentDeckId"
       :currentCard="currentCard"
+      :currentPage="currentPage"
       />
     <Menu
       :clickedMenuItem="clickedMenuItem" v-bind:class="{ blur : isBlurred}"/>
@@ -22,6 +23,8 @@
 <script>
 // @ is an alias to /src
 import * as Api from '@/api/Api.js'
+import About from '@/components/About.vue'
+import Contact from '@/components/Contact.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 import DecksContent from '@/components/DecksContent.vue'
 import CardsContent from '@/components/CardsContent.vue';
@@ -34,6 +37,8 @@ import Snotify from 'vue-snotify';
 export default {
   name: 'home',
   components: {
+    About,
+    Contact,
     DecksContent,
     CardsContent,
     HelloWorld,
@@ -44,6 +49,7 @@ export default {
   },
   data() {
     return {
+      currentPage: "home",
       currentDeckId:"",
       currentDeck: "",
       currentCard: "",
@@ -67,7 +73,15 @@ export default {
       this.isLittle = true;
       if(item == 'My Decks'){
         console.log("Decks page opened.")
+        this.currentPage="My Decks"
         this.pageContent = 'DecksContent';
+      }else if(item == "About"){
+        this.currentPage = "About lrnd"
+        this.pageContent = 'About'
+        
+      }else if(item == "Contact"){
+        this.currentPage="Contact"
+        this.pageContent = "Contact"
       }
 
     },
@@ -86,8 +100,9 @@ export default {
 
   .home{
     color: white;
-    margin-top: 10%;
-    height: 100%;
+    margin-top: 5%;
+    
+    padding-bottom: 40px;
     
   }
   .logo{
@@ -98,13 +113,13 @@ export default {
     font-weight: 700;
     font-size: 60px;
     position: fixed;
-    bottom: 10px;
+    bottom: -50px;
     right: 10px;
     opacity: .5;
   }
   .little{
     
-    position: absolute;
+    position: fixed;
     width: 100px;
     top: 10px;
     left: 10px;

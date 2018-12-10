@@ -10,7 +10,8 @@
       </vue-flashcard>
       <button 
         class="deleteButt"
-
+        alt="Remove This Card"
+        @click="()=>{deleteThisBitch(cardId)}"
       >&mdash;</button>
   </li>
 </template>
@@ -27,6 +28,14 @@ export default {
     return {};
   },
   props: {
+    cardId:{
+      type: String,
+      default:'',
+    },
+    deleteThisBitch:{
+      type: Function,
+      default: () => {},
+    },
     currentDeck:{
       type: String,
       default: '',
@@ -51,11 +60,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .deleteButt{
+  transition: all .2s;
   position: absolute;
+  top: 90%;
+  right: 0%;
   border-radius: 50%;
   padding: 2px 5px;
-  border: 2px solid white;
+  border: 2px solid white; 
   color: white;
   background: transparent;
   outline: none;
@@ -65,8 +78,10 @@ export default {
   &:hover{
     color: white;
     border: 2px solid white;
-    background: red;
+    background: rgb(255, 44, 44);
     cursor:pointer;
+    padding: 4px 7px;
+    box-shadow: 0px 0px 5px 5px rgba(0,0,0,.2);
 
 
     
@@ -83,12 +98,15 @@ export default {
   }
 }
 .flash{
+  margin: 0px !important;
   transition: transform .2s;
   &:hover {
     transform: translateY(-10px);
   }
 }
 .card {
+  width: 250px;
+  position: relative;
   transition: all 0.2s;
   color: black;
   h2 {

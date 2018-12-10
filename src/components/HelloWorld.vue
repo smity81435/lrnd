@@ -2,7 +2,7 @@
   <div class="hello">
     <h1>welcome to lrnd</h1>
     
-    <h2>Click the <strong id="clickit">"+"</strong>  Symbol to add a deck.</h2>
+    <h2>Click the <strong id="clickit">"+"</strong>  Symbol to begin.</h2>
   </div>
 </template>
 
@@ -34,5 +34,19 @@ li {
 }
 a {
   color: #42b983;
+}
+.hello{
+  transition: all 1s;
+  position: fixed;
+    margin: auto;
+    width: 40%;
+    height: 20%;
+  opacity: 1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+
 }
 </style>

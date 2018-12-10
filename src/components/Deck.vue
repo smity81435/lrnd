@@ -1,11 +1,13 @@
 <template>
-  <li class="deck" @click="handleClick">
-    <h2>{{deckTitle}}</h2>
-    <div class="buttons">
-      <button class="delbut">
-        <img class="delimg" src="../assets/delete.png" alt="Delete This deck.">
+  <li class="deck" >
+    <h2 class="deckCard" 
+    @click="handleClick">{{deckTitle}}
+    </h2>
+    <button class="deleteButt"
+    @click="()=>{deleteDeck(deckId)}"
+    >
+        &mdash;
       </button>
-    </div>
   </li>
 </template>
 
@@ -18,11 +20,19 @@ export default {
     };
   },
   props: {
+    deleteDeck:{
+      type: Function,
+      default: () => {},
+    },
     currentDeck:"",
     currentDeckId:"",
     deckTitle: {
       type: String,
       required: true
+    },
+    deckId:{
+      type: String,
+      required: true,
     },
     handleClick: {
         type: Function,
@@ -33,10 +43,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.delbut {
-  background: none;
-  border: none;
-  outline: none;
+.deleteButt{
+transition: all .2s;
+position: absolute;
+top: 90%;
+right: 0%;
+border-radius: 50%;
+padding: 2px 5px;
+border: 2px solid white; 
+color: white;
+background: transparent;
+outline: none;
+font-family: Avenir;
+font-size: 15px;
+font-weight: 700;
+  &:hover{
+      color: white;
+      border: 2px solid white;
+      background: rgb(255, 44, 44);
+      cursor:pointer;
+      padding: 4px 7px;
+      box-shadow: 0px 0px 5px 5px rgba(0,0,0,.2);
+
+
+      
+  }
 }
 .delimg {
   transition: all 0.2s;
@@ -48,22 +79,25 @@ export default {
     box-shadow: 0px 0px 3px 3px rgba(255, 26, 26, 0.1);
   }
 }
-.deck {
+.deckCard{
+  position: relative;
   transition: all 0.2s;
   width: 250px;
-  background: white;
-  padding: 200px 10px;
+  background: rgba(255,255,255,.4);
+  border: 2px solid white;
+  padding: 175px 10px;
   border-radius: 10px;
   box-shadow: 0px 3px 3px 3px rgba(0, 0, 0, 0.2);
+
+  font-size: 36px;
+  color: white;
   &:hover {
     box-shadow: 0px 3px 6px 5px rgba(170, 215, 255, 0.4);
     transform: translateY(-10px);
+    background: linear-gradient(rgba(36, 134, 245, 0.76),rgba(202, 1, 209, 0.781));
   }
-  h2 {
-    background: -webkit-linear-gradient(rgb(38, 108, 228), rgb(225, 96, 245));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    // padding: 200px 10px;
-  }
+}
+.deck {
+  position: relative;
 }
 </style>

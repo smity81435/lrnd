@@ -55,9 +55,10 @@ export default{
 <style lang="scss">
 body {
   background: url("./assets/matterhorn.png")no-repeat center center;
+  background-attachment: fixed;
   background-size: cover;
   height: 100vh;
-  overflow: hidden;
+  // overflow: hidden;
 }
 .back{
   width: 100vw;
