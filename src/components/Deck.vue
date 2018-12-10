@@ -16,23 +16,24 @@ export default {
   name: "Deck",
   data() {
     return {
-
-    };
+    }
   },
   props: {
     deleteDeck:{
       type: Function,
       default: () => {},
     },
-    currentDeck:"",
-    currentDeckId:"",
+    currentDeck:{
+      type: String,
+      default: "",
+    },
+    currentDeckId:{
+      type: String,
+      default: "",
+      },
     deckTitle: {
       type: String,
       required: true
-    },
-    deckId:{
-      type: String,
-      required: true,
     },
     handleClick: {
         type: Function,
@@ -64,9 +65,6 @@ font-weight: 700;
       cursor:pointer;
       padding: 4px 7px;
       box-shadow: 0px 0px 5px 5px rgba(0,0,0,.2);
-
-
-      
   }
 }
 .delimg {

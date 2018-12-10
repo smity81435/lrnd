@@ -30,6 +30,10 @@
     export default{
         name: "CardModal",
         props:{
+            currentDeckId:{
+                type: String,
+                required: true,
+            },
             currentDeck:{
                 type: String,
                 required: true,
@@ -48,7 +52,7 @@
             }
         },methods:{
             handleSubmit(){
-                this.onSubmitCard(this.frontText,this.backText);
+                this.onSubmitCard(this.frontText,this.backText,this.currentDeckId);
             },
         },
     }

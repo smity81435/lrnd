@@ -7,18 +7,17 @@
             <h2 v-if="!cardList.length">Click the "+" Symbol to add a card to the Deck.</h2>
             <ul class="cards" >
                 <Card 
-                v-for="(card, i) in cardList"
-                :key="i"
-                @click="() => openDeckCards(i)"
-                :cardTitle="card.front"
-                :cardId="card.id"
-                :cardBack="card.back"
-                :currentDeck="currentDeck"
-                :currentDeckId="currentDeckId"
-                :currentCard="currentCard"
-                :deleteThisBitch="deleteCard"
+                    v-for="(card, i) in cardList"
+                    :key="i"
+                    @click="() => openDeckCards(i)"
+                    :cardTitle="card.front"
+                    :cardId="card.id"
+                    :cardBack="card.back"
+                    :currentDeck="currentDeck"
+                    :currentDeckId="currentDeckId"
+                    :currentCard="currentCard"
+                    :deleteThisBitch="deleteCard"
                 />
-
             </ul>
             <div class="addit">
                 <img class = "newit" 
@@ -29,6 +28,7 @@
             </div>
         </div>
         <CardModal
+        :currentDeckId="currentDeckId"
         :currentDeck="currentDeck"
         :onSubmitCard="createNewCard"
         :visible="newCardModalShown"
@@ -88,11 +88,11 @@ export default {
             
             this.newCardModalShown=true;
         },
-        createNewCard(front, back) {
+        createNewCard(front, back, parentId) {
             const card = {
                 front: front,
                 back: back,
-                parentId: this.currentDeckId,
+                parentId: parentId,
             };
             Api.addCard(card).then((docRef)=>{
                 console.log("Aye Aye, Captain!! New Card added: ["+front+"] to deck:["+this.currentDeck+"].");

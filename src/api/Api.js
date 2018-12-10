@@ -22,10 +22,19 @@ export function initialize() {
     });
 }
 export function killChildren(deckId){
-    console.log("Searching the water for her crew, take no prisoners!!!");
-    var ref = db.collection("cards").where("parentId","==", deckId).get();
-    console.log(ref);
+    var kidsQuery = db.collection('cards').where('parentId','==',deckId);
+        kidsQuery.get()
+                .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
+                        doc.ref.delete();
+                        //sconsole.log("Child Killed.");
+                    });
+                });
 }
+export function pushMessage(newMess){
+    return db.collection("messages").add(newMess);
+}
+
 
 export function getDecks() {
     return db.collection("decks").get();
@@ -51,7 +60,7 @@ export function addDeck(deck){
     })
 }
 export function addCard(card){
-    return db.collection("cards").add(card)
+    return db.collection("cards").add(card);
         /* .then(function(docRef){
             console.log("New Card has been added to! ID: " , docRef.id);
         })

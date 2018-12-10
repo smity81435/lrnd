@@ -53,7 +53,7 @@ export default {
         default: () => {},
     },
     created(){
-        console.log(cardTitle);
+        
     }
   }
 };
@@ -105,7 +105,7 @@ export default {
   }
 }
 .card {
-  width: 250px;
+  // width: 250px;
   position: relative;
   transition: all 0.2s;
   color: black;

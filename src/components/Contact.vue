@@ -6,59 +6,100 @@
         <label for="cname">Full Name</label>
         <input type="text"
           placeholder="Jack Torrance"
+          autocomplete="nada"
           name="cname"
+          v-model="fullName"
         >
         <label for="email">Email</label>
         <input type="email"
-        name="email"
-        placeholder="jtorrance@theoverlook.com"
+          autocomplete="nada"
+          name="email"
+          placeholder="jtorrance@theoverlook.com"
+          v-model="email"
         >
         <label for="subject">Subject</label>
         <input type="text" 
+          autocomplete="nada"
           name="subject"
           placeholder="The Overlook"
+          v-model="subject"
         >
         <textarea name="message" id="contactMessage" cols="30" rows="10"
-        placeholder="Here's to five miserable months on the wagon, and all the irreparable harm it has caused me." 
+          autocomplete="nada"
+          placeholder="Here's to five miserable months on the wagon, and all the irreparable harm it has caused me."
+          v-model="message"
         ></textarea>
         <button class="subButt"
-        @click="submit"
-        :disabled="!isComplete"
+          type="submit"
+          @click.prevent="()=>{submitMessage()}"
+          
         >Send It!</button>
-
-
       </form>
     </div>
   </div>
-  
-  
 </template>
+
 <script>
+import * as Api from '@/api/Api.js'
+
+
+
   export default{
     name: "Contact",
     props:{
-      currentPage:"",
+      currentPage:{
+        type: String,
+        required: true,
+      },
     },
     data(){
-      return{}
+      return{
+        fullName:"",
+        email:"",
+        subject:"",
+        message:"",
+      }
     },
     methods:{
-      submit(){
-
+      deckAddedNotification(){
+          this.$snotify.success(
+              "Message Sent!",
+              'Contact Message',{
+                  timeout: 2000,
+                  pauseOnHover: true
+              }
+          );
+      },
+      submitMessage(){
+        const newMess = {
+          fullName:this.fullName,
+          email:this.email,
+          subject: this.subject,
+          message: this.message,
+        }
+        Api.pushMessage(newMess)
+            .then(()=>{
+              console.log("New Message in Database");
+            });
+        this.deckAddedNotification();
+        this.fullName="";
+        this.email="";
+        this.subject="";
+        this.message="";
       }
     },
     computed:{
-      isComplete(){
-        return this.cname && this.email && this.subject && this.message;
-      }
+      // isComplete(){
+      //   return this.cname && this.email && this.subject && this.message;
+      // }
     }
-
-
-
   }
 </script>
+
 <style lang="scss">
       .contactForm{
+        width: 60%;
+        margin: 10% auto;
         button{
           font-size: 20px;
           font-family: Avenir;
@@ -67,16 +108,16 @@
           background: transparent;
           font-weight: 600;
           border: 2px solid white;
-          
+          &:hover{
+            cursor: pointer;
+            background: lightgreen;
+          }
         }
-        width: 60%;
-        margin: 10% auto;
         label{
           font-weight: 600;
           color: white;
           opacity: .6;
         }
-
         input[type=text]{
           border-radius: 5px;
           color: white;

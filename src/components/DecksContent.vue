@@ -51,21 +51,34 @@ export default {
         }
     },
     props:{
-        currentDeck: "",
-        currentDeckId: "",
-        currentCard:"",
-        currentPage:"",
+        currentDeck:{
+            type: String,
+            required: true,
+            },
+        currentDeckId:{
+            type: String,
+            required: true,
+        },
+        currentCard:{
+            type: String,
+            required: true,
+        },
+        currentPage:{
+            type: String,
+            required: true,
+        },
         openDeck: {
             type: Function,
             default: () => {},
         },
     },
     methods:{
+
         showModal(){
             this.createNewDeckModalVisible = true;
 
         },
-        deckAddedNotification(currentDeck){
+        deckAddedNotification(){
             this.$snotify.success(
                 this.currentDeck+" added to your Decks.",
                 'Deck Added!',{
@@ -74,7 +87,7 @@ export default {
                 }
             );
         },
-        deckRemovedNotification(currentDeck){
+        deckRemovedNotification(){
             this.$snotify.error(
                 this.currentDeck+" removed from your Decks.",
                 'Deck Removed!',{
@@ -89,35 +102,39 @@ export default {
             }
             Api.addDeck(deck).then(()=>{
                 this.deckAddedNotification(value);
-                console.log("Great Scott!! New Deck spotted: "+value);
+                //console.log("Great Scott!! New Deck spotted: "+value);
                 // this.newDeckTitle = deckName;
                 this.isBlurred = false;
                 // Display decks content page
                 if (this.pagecontent!='DecksContent'){
                     this.pageContent = 'DecksContent';
-                    console.log("Dive! Dive! Dive!");
+                    //console.log("Dive! Dive! Dive!");
                     this.createNewDeckModalVisible = false;
                 }
                 // Hide modal
                 this.createNewDeckModalVisible = false;
                 this.deckList.push(deck);
              });
+             
         },
         handleDeck(name,id){
             //test handler
-            console.log("Deck handled.");
+            //console.log("Deck handled.");
+            // this.currentDeckId = id;
             this.openDeck(name,id);
         },
         deleteThisDeck(deckId, deckTitle){
-            Api.killChildren(deckId).then(()=>{
-                console.log("It has been done, Sire!");
-            });
-            Api.deleteDeck(deckId).then(()=>{
-                console.log("Deck and crew comletely destroyed, Captain!")
-                this.deckRemovedNotification(deckTitle);
-                const deckIndex = this.deckList.findIndex(deck => deck.id === deckId);
-                this.deckList.splice(deckIndex, 1);
-            });
+            //first ffind and kill children
+            Api.killChildren(deckId);
+            //then delete the deck
+            Api.deleteDeck(deckId)
+                .then(()=>{
+                    //console.log("Deck and crew comletely destroyed, Captain!")
+                    this.deckRemovedNotification(deckTitle);
+                    //update display
+                    const deckIndex = this.deckList.findIndex(deck => deck.id === deckId);
+                    this.deckList.splice(deckIndex, 1);
+                });
         }
     },
     created(){

@@ -22,7 +22,7 @@
 
 <script>
 // @ is an alias to /src
-import * as Api from '@/api/Api.js'
+
 import About from '@/components/About.vue'
 import Contact from '@/components/Contact.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
@@ -88,9 +88,10 @@ export default {
     changeToDeck(deckTitle, deckId){
       //test for click
       console.log("Changing to deck: "+deckTitle+".");
-      this.pageContent = 'cardsContent';
       this.currentDeck = deckTitle;
-      this.currentDeckId= deckId;
+      this.currentDeckId = deckId;
+      console.log(this.currentDeckId);
+      this.pageContent = 'cardsContent';
     },
   },
 }
