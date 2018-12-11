@@ -1,29 +1,16 @@
 # lrnd
+[View Project](http://creative.colorado.edu/~dosm6711/fwd/projects/lrnd/index.html)
 
-## Project setup
-```
-npm install
-```
+## Author
+Douglas Scott Smith 2018
+### Framework
+Vue.js 2.5.19
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### Dependencies
+[vue-radial-menu](https://www.npmjs.com/package/vue-radial-menu)
+[vue-flashcard](https://www.npmjs.com/package/vue-flashcard)
+[firebase](https://firebase.google.com/)
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Description
+Lrnd is an app used to simplify studying. It uses digital flashcards to display live database information, which the user is then allowed to manipulate. 
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
